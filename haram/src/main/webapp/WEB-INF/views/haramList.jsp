@@ -23,13 +23,17 @@
                     alert($(this).closest("tr").find("input[name=packageName]").val()+".model."+$(this).closest("tr").find("input[name=modelName]").val()+".java 를 smile");
 
 
-                    location.href = "<c:url value='/haramList'/>?packageName="+$(this).closest("tr").find("input[name=packageName]").val()+"&modelName="+$(this).closest("tr").find("input[name=modelName]").val()+"&tableName="+$(this).closest("tr").find("input[name=tableName]").val();
-                    /*
+                    location.href = "<c:url value='/haramList'/>?packageName="+$(this).closest("tr").find("input[name=packageName]").val()+"&modelName="+$(this).closest("tr").find("input[name=modelName]").val()+"&tableName="+$(this).closest("tr").find("input [name=tableName]").val();
+                });
+
+                $(".fileDown").click(function(){
+                   
                     $.ajax({
-                        url : "<c:url value='/haramList.do'/>",
+                        url : "<c:url value='/saveJavaXml'/>",
                         data : {
-                            "packageName" : $(this).closest("tr").find("input[name=packageName]").val(),
-                            "modelName" : $(this).closest("tr").find("input[name=modelName]").val()
+                            "javaSrc" : $(this).closest("td").find("textarea").val(),
+                            "javaName" : $(this).closest("td").find("input[name=javaName]").val(),
+                            "ext" : $(this).closest("td").find("input[name=ext]").val()
                             },
                         type : "post",
                         success : function(result) {
@@ -37,9 +41,8 @@
                         
                         }
                     });
-                    */
-        
                 });
+
 
             });
         })(jQuery);	
@@ -55,8 +58,8 @@
         </tr>
        
             <tr>
-                <td>
-                    <textarea style="width: 450px;height: 500px;overflow:auto;" wrap="off">
+                <td><input type="button" class="fileDown" value="java file download"><input name="javaName" value="<c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>" type="hidden"/><input name="ext" value="java" type="hidden"/><br>
+                    <textarea name="model_src" style="width: 450px;height: 500px;overflow:auto;" wrap="off">
 /**  
 * @ProjectName : B2B 수익성
 * @FileName : <c:out value='${haramOne.modelName}'/>.java - <c:out value='${haramOne.tableComment}'/>
@@ -91,7 +94,7 @@ public class <c:out value='${haramOne.modelName}'/> {
 }
                     </textarea>
                 </td>
-                <td>
+                <td><input type="button" class="fileDown" value="java file download"><input name="javaName" value="<c:out value='${haramOne.packageName}'/>.repository.<c:out value='${haramOne.modelName}'/>Repository" type="hidden"/><input name="ext" value="java" type="hidden"/><br>
                     <textarea style="width: 450px;height: 500px;overflow:auto;" wrap="off">
 /**  
 * @ProjectName : B2B 수익성
@@ -110,8 +113,6 @@ public class <c:out value='${haramOne.modelName}'/> {
 */                
 package <c:out value='${haramOne.packageName}'/>.repository;
 
-
-package <c:out value='${haramOne.packageName}'/>.repository;
 import <c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
@@ -126,7 +127,7 @@ public interface <c:out value='${haramOne.modelName}'/>Repository {
 
                     </textarea>
                 </td>
-                <td>
+                <td><input type="button" class="fileDown" value="xml file download"><input name="javaName" value="<c:out value='${haramOne.packageName}'/>.<c:out value='${haramOne.modelName}'/>" type="hidden"/><input name="ext" value="xml" type="hidden"/><br>
                     <textarea style="width: 450px;height: 500px;overflow:auto;" wrap="off">
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
@@ -180,7 +181,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <![CDATA[
         SELECT 
         <c:forEach var="haram" items="${haramList}" varStatus="status">
-            <c:out value='${haram.selectcolumn}'/><c:if test="${!status.last}">,</c:if></c:forEach> 
+            A.<c:out value='${haram.selectcolumn}'/><c:if test="${!status.last}">,</c:if></c:forEach> 
         FROM <c:out value='${haramOne.tableName}'/> A
         WHERE 1=1
         <c:forEach var="haram" items="${haramList}" varStatus="status"><c:if test="${!empty haram.primarycol}"> 
@@ -198,7 +199,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 <th>controller - <c:out value='${haramOne.modelName}'/>Controller.java</th>
             </tr>
             <tr>
-                <td>
+                <td><input type="button" class="fileDown" value="java file download"><input name="javaName" value="<c:out value='${haramOne.packageName}'/>.service.<c:out value='${haramOne.modelName}'/>Service" type="hidden"/><input name="ext" value="java" type="hidden"/><br>
                     <textarea style="width: 450px;height: 500px;overflow:auto;" wrap="off">
 /**  
 * @ProjectName : B2B 수익성
@@ -233,7 +234,7 @@ public interface <c:out value='${haramOne.modelName}'/>Service {
 
                     </textarea>
                 </td>
-                <td>
+                <td><input type="button" class="fileDown" value="java file download"><input name="javaName" value="<c:out value='${haramOne.packageName}'/>.service.<c:out value='${haramOne.modelName}'/>ServiceImpl" type="hidden"/><input name="ext" value="java" type="hidden"/><br>
                     <textarea style="width: 450px;height: 500px;overflow:auto;" wrap="off">
 /**  
 * @ProjectName : B2B 수익성
@@ -258,7 +259,7 @@ import com.lgcns.profit.common.model.SessionUser;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import <c:out value='${haramOne.packageName}'/>.<c:out value='${haramOne.modelName}'/>;
+import <c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>;
 import <c:out value='${haramOne.packageName}'/>.repository.<c:out value='${haramOne.modelName}'/>Repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -268,6 +269,7 @@ import org.springframework.stereotype.Service;
 //log4j
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import java.util.List;
 
 @Service("<c:out value='${haramOne.objectName}'/>Service")
 public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out value='${haramOne.modelName}'/>Service {
@@ -316,7 +318,7 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     * @return int
     */
     @Override
-    public int create<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception {
+    public int insert<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception {
         int result = <c:out value='${haramOne.objectName}'/>Repository.insert<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.objectName}'/>);
         return result;
     }
@@ -340,7 +342,7 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     */
     @Override
     public int delete<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception {
-        int result = <c:out value='${haramOne.objectName}'/>Repository.delete<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/>);
+        int result = <c:out value='${haramOne.objectName}'/>Repository.delete<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.objectName}'/>);
         return result;
     }
 
@@ -360,7 +362,7 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
                     </textarea>
                 </td>
 
-                <td>
+                <td><input type="button" class="fileDown" value="java file download"><input name="javaName" value="<c:out value='${haramOne.packageName}'/>.controller.<c:out value='${haramOne.modelName}'/>Controller" type="hidden"/><input name="ext" value="java" type="hidden"/><br>
                     <textarea style="width: 450px;height: 500px;overflow:auto;" wrap="off">
 /**  
 * @ProjectName : B2B 수익성

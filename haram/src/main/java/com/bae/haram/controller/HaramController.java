@@ -1,8 +1,10 @@
 package com.bae.haram.controller;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 @Controller
@@ -52,65 +54,32 @@ public class HaramController {
  
     }
 
-    @RequestMapping(value = "/getSetSave")
-	public @ResponseBody void getSetSave(String modelName, String modelField, String modelGet, String modelSet) throws Exception{
-		//C:\iKEP4-Project\workspace\ikep4\ikep4-approval\target\classes\com\lgcns\ikep4\approval\admin\model\ApprBox.class
+    @RequestMapping(value = "/saveJavaXml")
+	public @ResponseBody void saveJavaXml(String javaSrc, String javaName, String ext) throws Exception{
+
+		String where  = "C:\\haram\\haram\\src\\main\\";
+		if(ext.equals("java")){
+			where = where+"java\\";
+			javaName = javaName.replaceAll("\\.", "\\\\")+"."+ext;
+		}else{
+			where = where+"resources\\sql\\category";
+			javaName = javaName.split("com.lgcns.profit.category")[1];
+			javaName = javaName.replaceAll("\\.", "\\\\")+"."+ext;
+		}
+
+
+
+		System.out.println(where+javaName);
 		
-		modelName = modelName.replaceAll("target\\\\classes\\\\", "src\\\\main\\\\java\\\\");
-		modelName = modelName.replaceAll(".class", ".java");
+		File javaFile = new File(where+javaName);
+		FileUtils.touch(javaFile);//경로 및 파일 생성.
 
-		
+		byte[] src = javaSrc.getBytes();
 
-			String result="";
-			BufferedReader br = new BufferedReader(new FileReader(new File(modelName)));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(modelName+".new")));
+		FileOutputStream fs = new FileOutputStream(javaFile);
 
-
-			
-			int importCount = 0;
-			int publicCount = 0;
-			int annoCount = 0;
-			while((result = br.readLine()) != null) {
-				if(StringUtils.contains(result,"@")){
-					annoCount++;
-				}
-				if(StringUtils.contains(result,"public")){
-					
-					publicCount++;
-					if(annoCount!=0){
-						publicCount--;//get메서드 위에 @DateTimeFormat이 붙는 경우등등.
-						annoCount--;
-					}
-					if(publicCount==2){//첫번째 get메서드 앞에서 추가한다.
-						result = "\r\n" +modelField+ "\r\n\r\n" +modelGet+modelSet+ "\r\n"+result;
-					}
-				}
-				if(StringUtils.contains(modelGet,"DateTimeFormat")){
-					if(StringUtils.contains(result,"import")){
-						importCount++;
-						if(importCount==1){//첫번째 import 앞에서 추가한다.
-							result = "\r\nimport java.util.Date;"+
-									"\r\nimport org.springframework.format.annotation.DateTimeFormat;\r\n"+result;
-						}
-					}
-				}
-				
-				bw.write(result+ "\r\n");
-				bw.flush();
-			}
-			bw.close();
-			br.close();
-
-			File orginal = new File(modelName);
-			
-			File oldFile = new File(modelName+".old");
-			File newFile = new File(modelName+".new");
-			
-			orginal.renameTo(oldFile);
-			newFile.renameTo(orginal);
-			oldFile.delete();
-			
-
+		fs.write(src); 
+		fs.close();
 	}
 
 }
