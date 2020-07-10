@@ -472,12 +472,12 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
     
         SessionUser sessionUser = sessionService.retrieveSession(request.getHeader("Session-Key"));
 
-        return Map.of("<c:out value='${haramOne.objectName}'/>List", <c:out value='${haramOne.objectName}'/>Service.select<c:out value='${haramOne.modelName}'/>List(<c:out value='${haramOne.objectName}'/>));
+        return Map.of("<c:out value='${haramOne.objectName}'/>List", <c:out value='${haramOne.objectName}'/>Service.select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.objectName}'/>));
         }
 
     @ApiOperation(value="저장", httpMethod="POST", notes="저장")
     @PostMapping(value="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}/save${fn:toLowerCase(haramOne.objectName)}")
-    public int save<c:out value='${haramOne.modelName}'/>(HttpServletRequest request, @RequestBody List<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>) throws Exception {
+    public int save<c:out value='${haramOne.modelName}'/>(HttpServletRequest request, @RequestBody List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>) throws Exception {
         SessionUser sessionUser = sessionService.retrieveSession(request.getHeader("Session-Key"));
         
         <c:out value='${haramOne.objectName}'/>Service.save<c:out value='${haramOne.modelName}'/>(sessionUser, <c:out value='${haramOne.objectName}'/>);
