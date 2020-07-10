@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bae.haram.repository.HaramRepository">
+
+
+    <select id="haramList" resultType="com.bae.haram.model.Haram" parameterType="com.bae.haram.model.Haram">
+	<![CDATA[ 
+	SELECT 'private '|| bb.columntype || ' ' || bb.columnname || ';/*' || bb.comments|| '*/' AS modelfield,
+	       '    public '|| bb.columntype ||' get' || bb.capcolumnname || '() {' || CHAR (13) || CHAR (10) || '        return ' || bb.columnname || ';' || CHAR (13) || CHAR (10) || '    }'|| CHAR (13) || CHAR (10) ||' '    as modelget, 
+	       '    public '|| 'void' ||' set' || bb.capcolumnname || '(' || bb.columntype || ' ' || bb.columnname || ') {' || CHAR (13) || CHAR (10) || '        this.' || bb.columnname || ' = ' || bb.columnname || ';' || CHAR (13) || CHAR (10) || '    }'|| CHAR (13) || CHAR (10)||' '   as modelset, 
+	       bb.columntype as modeltype,
+	       bb.dbcolumn || ' as ' ||bb.columnname  AS selectcolumn,
+	       bb.dbcolumn  AS dbcolumn,
+	       CASE
+	         WHEN bb.capcolumnname = 'RegistDate' THEN
+	          ' NOW()'
+	         WHEN bb.capcolumnname = 'UpdateDate' THEN
+	          ' NOW()'
+			 WHEN bb.columntype = 'Date'  THEN
+			  ' NOW()'
+	         ELSE
+	          '#'||'{' || bb.columnname|| '}'
+	       END insertcolumn
+	      ,
+	       CASE
+	         WHEN bb.capcolumnname = 'RegistDate' THEN
+	          bb.dbcolumn || ' =  NOW()'
+	         WHEN bb.capcolumnname = 'UpdateDate' THEN
+	          bb.dbcolumn || ' =  NOW()'
+			 WHEN bb.columntype = 'Date'  THEN
+			  bb.dbcolumn || ' =  NOW()'
+	         ELSE
+	          bb.dbcolumn || ' = #'||'{' ||bb.columnname|| '}'
+	       END updatecolumn,
+	       '$' || '{' || #{modelName} ||'.' || columnname || '}' AS jspout,
+	       bb.columnname as fieldname,
+	       bb.comments,
+	       bb.primarycol
+	  FROM (SELECT aa.columntype
+	              ,lower(substr(aa.capcolumnname, 1, 1)) || substr(aa.capcolumnname, 2, length(aa.capcolumnname)) AS columnname
+	              ,aa.capcolumnname
+	              ,aa.dbcolumn
+	              ,aa.comments
+	        	  ,aa.primarycol
+	          FROM (SELECT REPLACE(initcap(REPLACE(COLUMN_NAME, '_', ' ')),' ','') AS capcolumnname,
+     COLUMN_NAME as dbcolumn,
+     column_comment AS comments,
+                CASE
+	                         WHEN data_type = 'int' THEN
+	                          'Integer'
+	                         WHEN data_type = 'bigint' THEN
+	                          'Integer' 
+	                         WHEN data_type = 'varchar' THEN
+	                          'String'
+	                         WHEN data_type = 'datetime' THEN
+	                          'Date'
+	                         ELSE
+	                          'String'
+	                       END columntype,
+              column_key as primarycol
+        from information_schema.COLUMNS 
+        where table_schema=#{schemaName} 
+        AND table_name= #{tableName} ORDER BY ordinal_position asc)aa) bb;
+		 ]]>
+    </select>
+
+    <select id="tableList" resultType="com.bae.haram.model.Haram" parameterType="com.bae.haram.model.Haram">
+		select
+			table_name as tableName ,
+			TABLE_COMMENT as tableComment,
+			SUBSTRING_INDEX(replace(table_name, '_', '.'), '.', 2) as packageName ,
+			replace(initcap(replace(substr(table_name, 3, length(table_name)), '_', ' ')), ' ', '') as modelName,
+			table_schema as schemaName
+		from
+			information_schema.TABLES
+		where
+			table_schema =
+			#{schemaName} 
+    </select>
+</mapper>

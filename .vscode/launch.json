@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DemoApplication<haram>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.bae.haram.DemoApplication",
+            "projectName": "haram",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-HaramApplication<haram>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.bae.haram.HaramApplication",
+            "projectName": "haram",
+            "args": ""
+        }
+    ]
+}
