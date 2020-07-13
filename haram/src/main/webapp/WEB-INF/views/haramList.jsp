@@ -54,7 +54,7 @@
         <tr>
             <th>model - <c:out value='${haramOne.modelName}'/>.java</th>
             <th>repository - <c:out value='${haramOne.modelName}'/>Repository.java</th>
-            <th>mapper - <c:out value='${haramOne.modelName}'/>.xml</th>
+            <th>mapper - <c:out value='${haramOne.objectName}'/>.xml</th>
         </tr>
        
             <tr>
@@ -136,11 +136,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="<c:out value='${haramOne.packageName}'/>.repository. <c:out value='${haramOne.modelName}'/>Repository">
 
-    <insert id="insert <c:out value='${haramOne.modelName}'/>" parameterType="<c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>">
+    <insert id="insert<c:out value='${haramOne.modelName}'/>" parameterType="<c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>">
     <![CDATA[
-    INSERT INTO <c:out value='${haramOne.tableName}'/> 
+    INSERT INTO <c:out value='${fn:toUpperCase(haramOne.tableName)}'/> 
         ( <c:forEach var="haram" items="${haramList}" varStatus="status">
-        <c:out value='${haram.dbcolumn}'/><c:if test="${!status.last}">,</c:if></c:forEach>        
+        <c:out value='${fn:toUpperCase(haram.dbcolumn)}'/><c:if test="${!status.last}">,</c:if></c:forEach>        
         ) 
     VALUES 
         (<c:forEach var="haram" items="${haramList}" varStatus="status">
@@ -151,7 +151,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <update id="update<c:out value='${haramOne.modelName}'/>" parameterType="<c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>">
         <![CDATA[ 
-        UPDATE CP_<c:out value='${haramOne.tableName}'/>
+        UPDATE <c:out value='${fn:toUpperCase(haramOne.tableName)}'/>
            SET 
         ]]>
 <c:forEach var="haram" items="${haramList}" varStatus="status">
@@ -439,7 +439,7 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
     * @return Map<String, Object>
     */
     @ApiOperation(value="검색조건조회", httpMethod="GET", notes="검색조건조회")
-    @RequestMapping(method=RequestMethod.GET, path="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}searchoptions") 
+    @RequestMapping(method=RequestMethod.GET, path="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}/init") 
     public Map<String, Object> <c:out value='${haramOne.objectName}'/>SearchOptions(HttpServletRequest request) throws Exception {
         
         SessionUser sessionUser = null;

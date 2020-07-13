@@ -9,7 +9,7 @@
 	       '    public '|| bb.columntype ||' get' || bb.capcolumnname || '() {' || CHAR (13) || CHAR (10) || '        return ' || bb.columnname || ';' || CHAR (13) || CHAR (10) || '    }'|| CHAR (13) || CHAR (10) ||' '    as modelget, 
 	       '    public '|| 'void' ||' set' || bb.capcolumnname || '(' || bb.columntype || ' ' || bb.columnname || ') {' || CHAR (13) || CHAR (10) || '        this.' || bb.columnname || ' = ' || bb.columnname || ';' || CHAR (13) || CHAR (10) || '    }'|| CHAR (13) || CHAR (10)||' '   as modelset, 
 	       bb.columntype as modeltype,
-	       bb.dbcolumn || ' as ' ||bb.columnname  AS selectcolumn,
+	       upper(bb.dbcolumn) || ' as ' ||bb.columnname  AS selectcolumn,
 	       bb.dbcolumn  AS dbcolumn,
 	       CASE
 	         WHEN bb.capcolumnname = 'RegistDate' THEN
@@ -24,13 +24,13 @@
 	      ,
 	       CASE
 	         WHEN bb.capcolumnname = 'RegistDate' THEN
-	          bb.dbcolumn || ' =  NOW()'
+	          upper(bb.dbcolumn) || ' =  NOW()'
 	         WHEN bb.capcolumnname = 'UpdateDate' THEN
-	          bb.dbcolumn || ' =  NOW()'
+	          upper(bb.dbcolumn) || ' =  NOW()'
 			 WHEN bb.columntype = 'Date'  THEN
-			  bb.dbcolumn || ' =  NOW()'
+			  upper(bb.dbcolumn) || ' =  NOW()'
 	         ELSE
-	          bb.dbcolumn || ' = #'||'{' ||bb.columnname|| '}'
+	          upper(bb.dbcolumn) || ' = #'||'{' ||bb.columnname|| '}'
 	       END updatecolumn,
 	       '$' || '{' || #{modelName} ||'.' || columnname || '}' AS jspout,
 	       bb.columnname as fieldname,
