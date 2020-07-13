@@ -7,7 +7,7 @@
 <fmt:formatDate value='${toDay}' pattern='yyyy.MM.dd' var="nowDate"/>
 
 <c:set var="packagePath1" value="${fn:replace(haramOne.packageName, 'com.lgcns.profit.category.', '/v1.')}"/>
-<c:set var="packagePath" value="${fn:replace(packagePath1,'.','//')}"/>
+<c:set var="packagePath" value="${fn:replace(packagePath1,'.','/')}"/>
 <!DOCTYPE html>
 <html>
 <head>
