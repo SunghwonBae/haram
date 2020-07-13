@@ -284,7 +284,7 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     * @param
     * @return int
     */
-    @Override
+    // @Override
     // @Transactional(rollbackFor = Exception.class)
     public int save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception {
         int cnt = 0;
@@ -292,7 +292,7 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
             row.setTenantUid(session.getTenantId());
             row.setModifyUserUid(session.getId());
             row.setModifyModuleUid(session.getId());
-
+            /*
             if (row.getCrudCode().equals("C")) {
                 Date time = new Date();
                 SimpleDateFormat format = new SimpleDateFormat("MddHHmmss");
@@ -308,6 +308,7 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
             } else if (row.getCrudCode().equals("D")) {
                 this.delete<c:out value='${haramOne.modelName}'/>(row);
             }
+            */
         }
         return 1;
     }
@@ -385,6 +386,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.Date;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -477,10 +479,12 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
 
     @ApiOperation(value="저장", httpMethod="POST", notes="저장")
     @PostMapping(value="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}/save${fn:toLowerCase(haramOne.objectName)}")
-    public int save<c:out value='${haramOne.modelName}'/>(HttpServletRequest request, @RequestBody List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>) throws Exception {
+    public int save<c:out value='${haramOne.modelName}'/>(HttpServletRequest request, @RequestBody List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List) throws Exception {
         SessionUser sessionUser = sessionService.retrieveSession(request.getHeader("Session-Key"));
         
-        <c:out value='${haramOne.objectName}'/>Service.save<c:out value='${haramOne.modelName}'/>(sessionUser, <c:out value='${haramOne.objectName}'/>);
+        for(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>:<c:out value='${haramOne.objectName}'/>List){
+            <c:out value='${haramOne.objectName}'/>Service.save<c:out value='${haramOne.modelName}'/>(sessionUser, <c:out value='${haramOne.objectName}'/>);
+        }
 
         return 1;
     }
