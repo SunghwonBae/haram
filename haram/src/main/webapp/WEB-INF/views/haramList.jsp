@@ -91,6 +91,7 @@ public class <c:out value='${haramOne.modelName}'/> {
 <c:forEach var="haram" items="${haramList}" varStatus="status">
     <c:out value='${haram.modelfield}'/>
 </c:forEach>
+    private String crudCode;
 }
                     </textarea>
                 </td>
@@ -225,7 +226,7 @@ import com.lgcns.profit.common.model.SessionUser;
 
 
 public interface <c:out value='${haramOne.modelName}'/>Service {
-    int insert<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
+    int create<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
     int delete<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
     List<<c:out value='${haramOne.modelName}'/>> select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
     int update<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
@@ -261,8 +262,11 @@ import java.util.Date;
 
 import <c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>;
 import <c:out value='${haramOne.packageName}'/>.repository.<c:out value='${haramOne.modelName}'/>Repository;
+import com.lgcns.profit.common.exception.BusinessException;
+import com.lgcns.profit.common.message.DBMessageSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 // import org.springframework.transaction.annotation.Transactional;
 
@@ -276,8 +280,10 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     @Autowired
     <c:out value='${haramOne.modelName}'/>Repository <c:out value='${haramOne.objectName}'/>Repository;
 
-    
-    private static final Logger LOGGER = LogManager.getLogger(<c:out value='${haramOne.modelName}'/>Service.class);
+    @Qualifier("dbmessageSource")
+    private DBMessageSource messageSource;
+
+    private static final Logger LOGGER = LogManager.getLogger(<c:out value='${haramOne.modelName}'/>ServiceImpl.class);
 
     /**
     * @Description 생성 수정 삭제에 대한  처리
@@ -287,6 +293,11 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     // @Override
     // @Transactional(rollbackFor = Exception.class)
     public int save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception {
+
+        if ( <c:out value='${haramOne.objectName}'/>List.isEmpty() ) {
+			throw new BusinessException(messageSource.getMessage(sessionUser.getTenantId(), sessionUser.getLocale(), "info.common.save0001"));
+        }
+        
         int cnt = 0;
         for (<c:out value='${haramOne.modelName}'/> row : <c:out value='${haramOne.objectName}'/>List) {
             row.setTenantUid(session.getTenantId());
@@ -319,7 +330,7 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     * @return int
     */
     @Override
-    public int insert<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception {
+    public int create<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception {
         int result = <c:out value='${haramOne.objectName}'/>Repository.insert<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.objectName}'/>);
         return result;
     }
@@ -463,7 +474,7 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
     }
     
     @ApiOperation(value = "조회", httpMethod = "GET", notes = "조회")
-    @GetMapping(value="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}/select${fn:toLowerCase(haramOne.objectName)}") 
+    @GetMapping(value="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}/${fn:toLowerCase(haramOne.objectName)}") 
     public Map<String, Object> select<c:out value='${haramOne.modelName}'/>(HttpServletRequest request<c:forEach var="haram" items="${haramList}" varStatus="status">
         , @RequestParam(required = false) <c:out value='${haram.modeltype}'/> <c:out value='${haram.fieldname}'/></c:forEach> 
         ) throws Exception { 
@@ -478,7 +489,7 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
         }
 
     @ApiOperation(value="저장", httpMethod="POST", notes="저장")
-    @PostMapping(value="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}/save${fn:toLowerCase(haramOne.objectName)}")
+    @PostMapping(value="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}/${fn:toLowerCase(haramOne.objectName)}")
     public int save<c:out value='${haramOne.modelName}'/>(HttpServletRequest request, @RequestBody List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List) throws Exception {
         SessionUser sessionUser = sessionService.retrieveSession(request.getHeader("Session-Key"));
         
