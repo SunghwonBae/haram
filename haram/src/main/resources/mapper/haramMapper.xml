@@ -66,7 +66,7 @@
 
     <select id="tableList" resultType="com.bae.haram.model.Haram" parameterType="com.bae.haram.model.Haram">
 		select
-			table_name as tableName ,
+			upper(table_name) as tableName ,
 			TABLE_COMMENT as tableComment,
 			SUBSTRING_INDEX(replace(table_name, '_', '.'), '.', 2) as packageName ,
 			replace(initcap(replace(substr(table_name, 3, length(table_name)), '_', ' ')), ' ', '') as modelName,
