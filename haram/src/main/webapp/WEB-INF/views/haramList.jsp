@@ -503,6 +503,96 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
                     </textarea>
                 </td>
             </tr>
+            <tr>
+                <th>Devon Rich UI Grid</th>
+                <th></th>
+                <th></th>
+            </tr>    
+            <tr>
+                <td>
+                    <textarea style="width: 450px;height: 500px;overflow:auto;" wrap="off">
+/*******************************************************
+    파일명 : <c:out value='${haramOne.objectName}'/>.js
+
+    설 명  : <c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/>
+
+    작성자 : <c:out value='${haramOne.developerName}'/>
+
+    작성일 : <c:out value='${nowDate}'/>    
+********************************************************/
+
+// 페이지 초기화
+Rui.onReady(function() {
+    cfn_lang();
+    fn_init();
+});
+
+
+// 전역변수
+let dgList;
+let cbUseYn;
+let dataSet;
+             
+
+// 기능 
+function fn_init() {
+
+    dataSet = new Rui.data.LJsonDataSet({
+        id: 'dataSet',
+        fields: [
+<c:forEach var="haram" items="${haramList}" varStatus="status">
+            { id: '<c:out value='${haram.fieldname}'/>' }<c:if test="${!status.last}">,</c:if></c:forEach>
+        ]
+    });
+
+
+    var columnModel = new Rui.ui.grid.LColumnModel({
+        autoWidth: true,
+        columns: [
+        <c:forEach var="haram" items="${haramList}" varStatus="status">
+            { field: '<c:out value='${haram.fieldname}'/>', label: '${empty haram.comments ? haram.fieldname:haram.comments}', width: 100, align: 'center'  }<c:if test="${!status.last}">,</c:if></c:forEach>
+        ]
+    });
+
+    dgList = new Rui.ui.grid.LGridPanel(
+    {
+        columnModel: columnModel,
+        autoWidth: true,
+        dataSet:dataSet
+    });
+    
+    dgList.render('dgList');
+
+
+    // 검색 영역 검색
+    var btnSearch = new Rui.ui.LButton('btnSearch');
+    btnSearch.on('click', function(){
+        var url = '<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}/${fn:toLowerCase(haramOne.objectName)}?';
+        <c:forEach var="haram" items="${haramList}" varStatus="status">
+        url += '<c:out value='${haram.fieldname}'/>=' + (tb_<c:out value='${haram.fieldname}'/>.getValue() || '');</c:forEach>
+
+        cfn_ajax(url,
+            function(response) {
+                const result = response;
+                if ( result.<c:out value='${haramOne.objectName}'/>List.length > 0 ) {
+                    var da = {"records" : result.<c:out value='${haramOne.objectName}'/>List};
+                    dataSet.loadData(da);
+                } else {
+                    dataSet.clearData();
+                }
+                $('#emCnt').text(result.<c:out value='${haramOne.objectName}'/>List.length);
+
+            },
+            function(response, status, error) {
+                console.log('error');
+                console.log(response, status, error);
+            },
+            'GET'
+        );
+    });
+}    
+                    </textarea>
+            </tr>        
     </table>
 
 </body>
