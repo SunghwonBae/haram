@@ -228,7 +228,7 @@ import com.lgcns.profit.common.model.SessionUser;
 public interface <c:out value='${haramOne.modelName}'/>Service {
     int create<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
     int delete<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
-    List<<c:out value='${haramOne.modelName}'/>> select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
+    List<<c:out value='${haramOne.modelName}'/>> select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>, SessionUser session) throws Exception;
     int update<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
 }
 
@@ -295,7 +295,7 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     public int save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception {
 
         if ( <c:out value='${haramOne.objectName}'/>List.isEmpty() ) {
-			throw new BusinessException(messageSource.getMessage(sessionUser.getTenantId(), sessionUser.getLocale(), "info.common.save0001"));
+			throw new BusinessException(messageSource.getMessage(session.getTenantId(), session.getLocale(), "info.common.save0001"));
         }
         
         int cnt = 0;
