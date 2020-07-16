@@ -226,6 +226,7 @@ import com.lgcns.profit.common.model.SessionUser;
 
 
 public interface <c:out value='${haramOne.modelName}'/>Service {
+    int save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception;
     int create<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
     int delete<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
     List<<c:out value='${haramOne.modelName}'/>> select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>, SessionUser session) throws Exception;
@@ -290,7 +291,7 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     * @param
     * @return int
     */
-    // @Override
+    @Override
     // @Transactional(rollbackFor = Exception.class)
     public int save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception {
 
@@ -493,10 +494,8 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
     public int save<c:out value='${haramOne.modelName}'/>(HttpServletRequest request, @RequestBody List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List) throws Exception {
         SessionUser sessionUser = sessionService.retrieveSession(request.getHeader("Session-Key"));
         
-        for(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>:<c:out value='${haramOne.objectName}'/>List){
-            <c:out value='${haramOne.objectName}'/>Service.save<c:out value='${haramOne.modelName}'/>(sessionUser, <c:out value='${haramOne.objectName}'/>);
-        }
-
+        <c:out value='${haramOne.objectName}'/>Service.save<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.objectName}'/>List, sessionUser);
+        
         return 1;
     }
 }          
