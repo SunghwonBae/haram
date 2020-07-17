@@ -226,7 +226,7 @@ import com.lgcns.profit.common.model.SessionUser;
 
 
 public interface <c:out value='${haramOne.modelName}'/>Service {
-    public int save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception;
+    public void save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception;
     public int create<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
     public int delete<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
     public List<<c:out value='${haramOne.modelName}'/>> select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>, SessionUser session) throws Exception;
@@ -293,36 +293,29 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     */
     @Override
     // @Transactional(rollbackFor = Exception.class)
-    public int save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception {
+    public void save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception {
 
         if ( <c:out value='${haramOne.objectName}'/>List.isEmpty() ) {
 			throw new BusinessException(messageSource.getMessage(session.getTenantId(), session.getLocale(), "info.common.save0001"));
         }
         
-        int cnt = 0;
-        for (<c:out value='${haramOne.modelName}'/> row : <c:out value='${haramOne.objectName}'/>List) {
-            row.setTenantUid(session.getTenantId());
-            row.setModifyUserUid(session.getId());
-            row.setModifyModuleUid(session.getId());
-            /*
-            if (row.getCrudCode().equals("C")) {
-                Date time = new Date();
-                SimpleDateFormat format = new SimpleDateFormat("MddHHmmss");
-                String verUid = format.format(time);
-
-                //row.setExchgRateSeq(verUid+cnt);
-                row.setCreateUserUid(session.getId());
-                row.setCreateModuleUid(session.getId());
-                this.create<c:out value='${haramOne.modelName}'/>(row);
-                cnt++;
-            } else if (row.getCrudCode().equals("U")) {
-                this.update<c:out value='${haramOne.modelName}'/>(row);
-            } else if (row.getCrudCode().equals("D")) {
-                this.delete<c:out value='${haramOne.modelName}'/>(row);
+        for (<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/> : <c:out value='${haramOne.objectName}'/>List) {
+            <c:out value='${haramOne.objectName}'/>.setTenantUid(session.getTenantId());
+            <c:out value='${haramOne.objectName}'/>.setModifyUserUid(session.getId());
+            <c:out value='${haramOne.objectName}'/>.setModifyModuleUid(session.getId());
+            switch (<c:out value='${haramOne.objectName}'/>.getDuistate()) {
+                case 1:
+                <c:out value='${haramOne.objectName}'/>.setCreateUserUid(session.getId());
+                    createRiskEvalStdAttr(<c:out value='${haramOne.objectName}'/>);
+                break;
+                case 2:
+                //수정
+                break;
+                case 3:
+                //삭제
+                break;
             }
-            */
         }
-        return 1;
     }
 
     /**
@@ -474,7 +467,7 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
     }
     
     @ApiOperation(value = "조회", httpMethod = "GET", notes = "조회")
-    @GetMapping(value="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}/${fn:toLowerCase(haramOne.objectName)}") 
+    @GetMapping(value="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}") 
     public Map<String, Object> select<c:out value='${haramOne.modelName}'/>(HttpServletRequest request<c:forEach var="haram" items="${haramList}" varStatus="status">
         , @RequestParam(required = false) <c:out value='${haram.modeltype}'/> <c:out value='${haram.fieldname}'/></c:forEach> 
         ) throws Exception { 
@@ -489,7 +482,7 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
     }
 
     @ApiOperation(value="저장", httpMethod="POST", notes="저장")
-    @PostMapping(value="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}/${fn:toLowerCase(haramOne.objectName)}")
+    @PostMapping(value="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}")
     public int save<c:out value='${haramOne.modelName}'/>(HttpServletRequest request, @RequestBody List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List) throws Exception {
         SessionUser sessionUser = sessionService.retrieveSession(request.getHeader("Session-Key"));
         
