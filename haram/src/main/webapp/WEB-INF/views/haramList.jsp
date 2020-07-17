@@ -135,7 +135,7 @@ public interface <c:out value='${haramOne.modelName}'/>Repository {
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="<c:out value='${haramOne.packageName}'/>.repository. <c:out value='${haramOne.modelName}'/>Repository">
+<mapper namespace="<c:out value='${haramOne.packageName}'/>.repository.<c:out value='${haramOne.modelName}'/>Repository">
 
     <insert id="insert<c:out value='${haramOne.modelName}'/>" parameterType="<c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>">
     <![CDATA[
@@ -226,11 +226,11 @@ import com.lgcns.profit.common.model.SessionUser;
 
 
 public interface <c:out value='${haramOne.modelName}'/>Service {
-    int save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception;
-    int create<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
-    int delete<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
-    List<<c:out value='${haramOne.modelName}'/>> select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>, SessionUser session) throws Exception;
-    int update<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
+    public int save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception;
+    public int create<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
+    public int delete<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
+    public List<<c:out value='${haramOne.modelName}'/>> select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>, SessionUser session) throws Exception;
+    public int update<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
 }
 
 
@@ -276,7 +276,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import java.util.List;
 
-@Service("<c:out value='${haramOne.objectName}'/>Service")
+@Service("<c:out value='${haramOne.objectName}'/>ServiceImpl")
 public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out value='${haramOne.modelName}'/>Service {
     @Autowired
     <c:out value='${haramOne.modelName}'/>Repository <c:out value='${haramOne.objectName}'/>Repository;
@@ -440,8 +440,7 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
     @Autowired
     CommonCodeService commonCodeService;
 
-
-    @Resource(name="<c:out value='${haramOne.objectName}'/>Service")
+    @Autowired
     private <c:out value='${haramOne.modelName}'/>Service <c:out value='${haramOne.objectName}'/>Service;
 
     
