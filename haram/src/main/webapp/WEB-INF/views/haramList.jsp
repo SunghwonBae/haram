@@ -487,7 +487,7 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
         SessionUser sessionUser = sessionService.retrieveSession(request.getHeader("Session-Key"));
 
         return Map.of("<c:out value='${haramOne.objectName}'/>List", <c:out value='${haramOne.objectName}'/>Service.select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.objectName}'/>));
-        }
+    }
 
     @ApiOperation(value="저장", httpMethod="POST", notes="저장")
     @PostMapping(value="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}/${fn:toLowerCase(haramOne.objectName)}")
