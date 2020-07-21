@@ -92,6 +92,10 @@ public class <c:out value='${haramOne.modelName}'/> {
     <c:out value='${haram.modelfield}'/>
 </c:forEach>
     private String crudCode;
+
+    private String localeCd;
+
+    private Integer duistate;//그리드 편집상태. 0그대로 1추가, 2수정, 3삭제
 }
                     </textarea>
                 </td>
@@ -360,6 +364,7 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     @Override
     public List<<c:out value='${haramOne.modelName}'/>> select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>, SessionUser session) throws Exception {
         <c:out value='${haramOne.objectName}'/>.setTenantUid(session.getTenantId());
+        <c:out value='${haramOne.objectName}'/>.setLocaleCd(session.getLocale());
         List<<c:out value='${haramOne.modelName}'/>> result = <c:out value='${haramOne.objectName}'/>Repository.select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.objectName}'/>);
         return result;
     }
