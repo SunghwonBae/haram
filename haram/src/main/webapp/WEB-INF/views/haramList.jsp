@@ -306,7 +306,7 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
             switch (<c:out value='${haramOne.objectName}'/>.getDuistate()) {
                 case 1:
                 <c:out value='${haramOne.objectName}'/>.setCreateUserUid(session.getId());
-                    createRiskEvalStdAttr(<c:out value='${haramOne.objectName}'/>);
+                    create<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.objectName}'/>);
                 break;
                 case 2:
                 //수정
