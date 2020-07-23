@@ -403,6 +403,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import <c:out value='${haramOne.packageName}'/>.service.<c:out value='${haramOne.modelName}'/>Service;
 import <c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>;
+import <c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>Builder;
 
 import com.lgcns.profit.common.model.SessionUser;
 import com.lgcns.profit.common.service.SessionService;
@@ -410,6 +411,7 @@ import com.lgcns.profit.common.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.netty.util.internal.StringUtil;
 import io.swagger.annotations.ApiOperation;
 
 
@@ -477,10 +479,14 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
         , @RequestParam(required = false) <c:out value='${haram.modeltype}'/> <c:out value='${haram.fieldname}'/></c:forEach> 
         ) throws Exception { 
         
-        <c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>  = <c:out value='${haramOne.modelName}'/>.builder()
-        .<c:forEach var="haram" items="${haramList}" varStatus="status"><c:out value='${haram.fieldname}'/>(<c:out value='${haram.fieldname}'/>)
-        .</c:forEach>build();
-    
+        <c:out value='${haramOne.modelName}'/>Builder bldr = <c:out value='${haramOne.modelName}'/>.builder();
+
+        <c:forEach var="haram" items="${haramList}" varStatus="status">
+        if(!StringUtil.isNullOrEmpty(<c:out value='${haram.fieldname}'/>)) bldr.<c:out value='${haram.fieldname}'/>(<c:out value='${haram.fieldname}'/>);
+        </c:forEach>
+
+        <c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>   = bldr.build();
+
         SessionUser sessionUser = sessionService.retrieveSession(request.getHeader("Session-Key"));
 
         return Map.of("<c:out value='${haramOne.objectName}'/>List", <c:out value='${haramOne.objectName}'/>Service.select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.objectName}'/>, sessionUser));
