@@ -403,7 +403,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import <c:out value='${haramOne.packageName}'/>.service.<c:out value='${haramOne.modelName}'/>Service;
 import <c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>;
-import <c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>Builder;
+import <c:out value='${haramOne.packageName}'/>.model.<c:out value='${haramOne.modelName}'/>.<c:out value='${haramOne.modelName}'/>Builder;
 
 import com.lgcns.profit.common.model.SessionUser;
 import com.lgcns.profit.common.service.SessionService;
