@@ -506,7 +506,7 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
             </tr>
             <tr>
                 <th>Devon Rich UI Grid</th>
-                <th></th>
+                <th>HTML grid</th>
                 <th></th>
             </tr>    
             <tr>
@@ -530,16 +530,18 @@ Rui.onReady(function() {
 
 
 // 전역변수
-let dgList;
+let <c:out value='${haramOne.objectName}'/> = { dataSet : null , columnModel : null ,gridPanel : null}//<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/>
 let cbUseYn;
-let dataSet;
+let <c:out value='${haramOne.objectName}'/>_SM;
              
 
 // 기능 
-function fn_init() {
+const fn_init = function(){
 
-    dataSet = new Rui.data.LJsonDataSet({
-        id: 'dataSet',
+    <c:out value='${haramOne.objectName}'/>.dataSet = new Rui.data.LJsonDataSet({
+        id: '<c:out value='${haramOne.objectName}'/>.dataSet',
+        remainRemoved: true,
+        canMarkableEvent: true,
         fields: [
 <c:forEach var="haram" items="${haramList}" varStatus="status">
             { id: '<c:out value='${haram.fieldname}'/>' }<c:if test="${!status.last}">,</c:if></c:forEach>
@@ -547,23 +549,49 @@ function fn_init() {
     });
 
 
-    var columnModel = new Rui.ui.grid.LColumnModel({
+    <c:out value='${haramOne.objectName}'/>.columnModel = new Rui.ui.grid.LColumnModel({
         autoWidth: true,
+        defaultDraggable: false,
+        defaultEditable: true,
         columns: [
         <c:forEach var="haram" items="${haramList}" varStatus="status">
             { field: '<c:out value='${haram.fieldname}'/>', label: '${empty haram.comments ? haram.fieldname:haram.comments}', width: 100, align: 'center'  }<c:if test="${!status.last}">,</c:if></c:forEach>
         ]
     });
 
-    dgList = new Rui.ui.grid.LGridPanel(
+    <c:out value='${haramOne.objectName}'/>.gridPanel = new Rui.ui.grid.LGridPanel(
     {
-        columnModel: columnModel,
+        columnModel: <c:out value='${haramOne.objectName}'/>.columnModel,
         autoWidth: true,
-        dataSet:dataSet
+        clickToEdit: true,
+        editable:true,
+        dataSet:<c:out value='${haramOne.objectName}'/>.dataSet
     });
     
-    dgList.render('dgList');
+    <c:out value='${haramOne.objectName}'/>.gridPanel.render('<c:out value='${haramOne.objectName}'/>.gridDiv');
 
+    <c:out value='${haramOne.objectName}'/>_SM  = <c:out value='${haramOne.objectName}'/>.gridPanel.getSelectionModel();
+
+
+    <c:out value='${haramOne.objectName}'/>_SM.on('selectCell', function(e){
+        var column = <c:out value='${haramOne.objectName}'/>.columnModel.getColumnAt(e.col, true);
+        var colId = column.getId();
+        /*
+        <c:forEach var="haram" items="${haramList}" varStatus="status">
+        if (colId == '<c:out value='${haram.fieldname}'/>') {
+            
+        }</c:forEach>
+        */
+    
+    });
+
+    <c:out value='${haramOne.objectName}'/>_SM.on('selectRow', function(e){
+        var selectRowRecord = <c:out value='${haramOne.objectName}'/>.dataSet.getAt(e.row);
+        /*
+        <c:forEach var="haram" items="${haramList}" varStatus="status">
+        var select_<c:out value='${haram.fieldname}'/>= selectRowRecord.get('<c:out value='${haram.fieldname}'/>');</c:forEach>
+        */
+    });
 
     // 검색 영역 검색
     var btnSearch = new Rui.ui.LButton('btnSearch');
@@ -577,11 +605,11 @@ function fn_init() {
                 const result = response;
                 if ( result.<c:out value='${haramOne.objectName}'/>List.length > 0 ) {
                     var da = {"records" : result.<c:out value='${haramOne.objectName}'/>List};
-                    dataSet.loadData(da);
+                    <c:out value='${haramOne.objectName}'/>.dataSet.loadData(da);
                 } else {
-                    dataSet.clearData();
+                    <c:out value='${haramOne.objectName}'/>.dataSet.clearData();
                 }
-                $('#emCnt').text(result.<c:out value='${haramOne.objectName}'/>List.length);
+                $('#<c:out value='${haramOne.objectName}'/>Count').text(result.<c:out value='${haramOne.objectName}'/>List.length);
 
             },
             function(response, status, error) {
@@ -592,7 +620,132 @@ function fn_init() {
         );
     });
 }    
+
+//<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/> 그리드 데이터 로드하기
+const fn_<c:out value='${haramOne.objectName}'/>Grid = function(response){
+    const result = response;
+    //console.log("result:"+JSON.stringify(result));
+    if ( result.<c:out value='${haramOne.objectName}'/>List.length > 0 ) {
+
+        var da = {"records" : result.<c:out value='${haramOne.objectName}'/>List};
+        <c:out value='${haramOne.objectName}'/>.dataSet.loadData(da);
+
+    } else {
+        <c:out value='${haramOne.objectName}'/>.dataSet.clearData();
+    }
+    $('#<c:out value='${haramOne.objectName}'/>Count').text(result.<c:out value='${haramOne.objectName}'/>List.length);
+    
+}//END fn_<c:out value='${haramOne.objectName}'/>
+
+$(function() {
+
+    //<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/> [취소] 버튼
+    $('#btnUndo<c:out value='${haramOne.modelName}'/>').on('click', function(){
+        if(<c:out value='${haramOne.objectName}'/>.dataSet.getMarkedCount() > 0) {
+            for(var i = 0 ; i < riskEvalTmplt.dataSet.getCount() ; i++) {
+                if(<c:out value='${haramOne.objectName}'/>.dataSet.isMarked(i))
+                <c:out value='${haramOne.objectName}'/>.dataSet.undo(i);
+            }
+        } else {
+            var row = <c:out value='${haramOne.objectName}'/>.dataSet.getRow();
+            if(row < 0) return;
+            <c:out value='${haramOne.objectName}'/>.dataSet.undo(row);
+        }
+    });
+
+    //<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/> [전체취소] 버튼
+    $('#btnUndoAll<c:out value='${haramOne.modelName}'/>').on('click', function(){
+        <c:out value='${haramOne.objectName}'/>.dataSet.undoAll();
+    });
+
+    //<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/> [행추가] 버튼
+    $('#btnNew<c:out value='${haramOne.modelName}'/>').on('click', function(){
+        var row = <c:out value='${haramOne.objectName}'/>.dataSet.newRecord();
+        if (row !== false) {
+            addrowInit(row);
+        }
+    });
+
+    //<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/> [행삽입] 버튼
+    $('#btnInsert<c:out value='${haramOne.modelName}'/>').on('click', function(){
+        if(<c:out value='${haramOne.objectName}'/>.dataSet.getRow() < 0) return;
+        var row = <c:out value='${haramOne.objectName}'/>.dataSet.newRecord(riskEvalTmplt.dataSet.getRow());
+        if (row !== false) {
+            addrowInit(row);
+        }
+    });
+
+    //<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/> [삭제] 버튼
+    $('#btnDelete<c:out value='${haramOne.modelName}'/>').on('click', function(){
+        if(<c:out value='${haramOne.objectName}'/>.dataSet.getMarkedCount() > 0) {
+            <c:out value='${haramOne.objectName}'/>.dataSet.removeMarkedRows();
+        } else {
+            var row = <c:out value='${haramOne.objectName}'/>.dataSet.getRow();
+            if(row < 0) return;
+            <c:out value='${haramOne.objectName}'/>.dataSet.removeAt(row);
+        }
+    });
+
+    //<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/> [저장] 버튼
+    $('#btnSave<c:out value='${haramOne.modelName}'/>').on('click', function(){
+
+        var modifedCheckJson = JSON.stringify(JSON.parse(<c:out value='${haramOne.objectName}'/>.dataSet.serializeMarkedOnly()).records);
+
+        console.log(modifedCheckJson);
+
+        if(<c:out value='${haramOne.objectName}'/>.dataSet.getMarkedCount()==0){
+            cfn_openAlertMsgBox('선택된 항목이 없습니다.');
+            return ;
+        }
+
+        cfn_openConfirmMsgBox('저장 하시겠습니까', function() {
+            cfn_ajax('<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}',
+                function(response) {
+                    //console.log('성공');
+                    //console.log(response);
+
+                    cfn_openAlertMsgBox('정상적으로 처리되었습니다.');
+                },
+                function(response, status, error) {
+                    console.log('error');
+                    console.log(response, status, error);
+                },
+                'POST',
+                modifedCheckJson
+            );
+        });
+    });//END $('#btnSave<c:out value='${haramOne.modelName}'/>').on('click', function(){
+});//END $(function() {        
+
                     </textarea>
+                </td>
+                <td>
+                    <textarea style="width: 450px;height: 500px;overflow:auto;" wrap="off">
+                        
+                        <div class="conHeader_wrap">
+                            <h2><c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/></h2>
+                            <em class="count" id="<c:out value='${haramOne.objectName}'/>Count"></em>
+                            <ul class="innerBtn_wrap">
+                                <li><a href="#a" id='btnInsert<c:out value='${haramOne.modelName}'/>'>행삽입</a></li>
+                                <li><a href="#a" id='btnUndo<c:out value='${haramOne.modelName}'/>'>취소</a></li>
+                                <li><a href="#a" id='btnUndoAll<c:out value='${haramOne.modelName}'/>'>전체취소</a></li>
+                            </ul>
+                            <ul class="btnArea">
+                                <li><button type="button" id='btnNew<c:out value='${haramOne.modelName}'/>' class="btn_add"><span>추가</span></button></li>
+                                <li><button type="button" id='btnDelete<c:out value='${haramOne.modelName}'/>' class="btn_subtract"><span>삭제</span></button></li>
+                            </ul>
+                        </div>
+                        <div class="gridStyle_wrap hiBase" style="height:200px !important;">
+                            <div id="<c:out value='${haramOne.objectName}'/>.gridDiv" style="height: 200px;"></div>
+                        </div>
+                        <div class="tableFooter_wrap">    
+                        <div class="conBtn_wrap">
+                            <a href="#a" id='btnSave<c:out value='${haramOne.modelName}'/>' class="btn_point">저장</a>
+                        </div>
+                        </div>
+                    
+                    </textarea>
+                </td>
             </tr>        
     </table>
 
