@@ -475,15 +475,14 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
     
     @ApiOperation(value = "조회", httpMethod = "GET", notes = "조회")
     @GetMapping(value="<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}") 
-    public Map<String, Object> select<c:out value='${haramOne.modelName}'/>(HttpServletRequest request<c:forEach var="haram" items="${haramList}" varStatus="status">
-        , @RequestParam(required = false) <c:out value='${haram.modeltype}'/> <c:out value='${haram.fieldname}'/></c:forEach> 
+    public Map<String, Object> select<c:out value='${haramOne.modelName}'/>(HttpServletRequest request<c:forEach var="haram" items="${haramList}" varStatus="status"><c:if test="${haram.modeltype ne 'Date'}">
+        , @RequestParam(required = false) <c:out value='${haram.modeltype}'/> <c:out value='${haram.fieldname}'/></c:if></c:forEach> 
         ) throws Exception { 
         
         <c:out value='${haramOne.modelName}'/>Builder bldr = <c:out value='${haramOne.modelName}'/>.builder();
 
-        <c:forEach var="haram" items="${haramList}" varStatus="status">
-        if(!StringUtil.isNullOrEmpty(<c:out value='${haram.fieldname}'/>)) bldr.<c:out value='${haram.fieldname}'/>(<c:out value='${haram.fieldname}'/>);
-        </c:forEach>
+        <c:forEach var="haram" items="${haramList}" varStatus="status"><c:if test="${haram.modeltype ne 'Date'}">
+        if(!StringUtil.isNullOrEmpty(<c:out value='${haram.fieldname}'/>)) bldr.<c:out value='${haram.fieldname}'/>(<c:out value='${haram.fieldname}'/>);</c:if></c:forEach>
 
         <c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>   = bldr.build();
 
