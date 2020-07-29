@@ -554,6 +554,8 @@ const fn_init = function(){
         defaultDraggable: false,
         defaultEditable: true,
         columns: [
+            new Rui.ui.grid.LStateColumn(),
+            new Rui.ui.grid.LSelectionColumn(),
         <c:forEach var="haram" items="${haramList}" varStatus="status">
             { field: '<c:out value='${haram.fieldname}'/>', label: '${empty haram.comments ? haram.fieldname:haram.comments}', width: 100, align: 'center'  }<c:if test="${!status.last}">,</c:if></c:forEach>
         ]
