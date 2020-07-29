@@ -646,6 +646,32 @@ const addrowInit = function(row){
     record.set('useYn', 'Y');
 }
 
+//유효성 검사
+const fn_validate = function(option) {
+    let msg = '';
+
+    switch(option) {
+    /*-------저장-------*/
+    case 'btnSave<c:out value='${haramOne.modelName}'/>':
+        if(!<c:out value='${haramOne.objectName}'/>.dataSet.isUpdated()) {
+            msg = Rui.getMessageManager().get('$.base.msg102');
+            break;
+        }else if(!<c:out value='${haramOne.objectName}'/>.validatorManager.validateDataSet(<c:out value='${haramOne.objectName}'/>.dataSet)) {
+           Rui.alert(<c:out value='${haramOne.objectName}'/>.validatorManager.getMessageList().join('<br/>'), false, 400);
+           return false;
+        }
+        break;
+
+    }
+
+     if(!Rui.isEmpty(msg)) {
+         //lfShowMessage(msg);
+         Rui.alert(msg);
+         return false;
+     }
+
+    return true;
+}
 
 $(function() {
 
@@ -708,6 +734,10 @@ $(function() {
             return ;
         }
 
+        if(!fn_validate('btnSave<c:out value='${haramOne.modelName}'/>')) {
+            return false;
+        }
+        
         cfn_openConfirmMsgBox('저장 하시겠습니까', function() {
             cfn_ajax('<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}',
                 function(response) {
