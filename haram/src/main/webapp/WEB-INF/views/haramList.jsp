@@ -644,7 +644,7 @@ $(function() {
     //<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/> [취소] 버튼
     $('#btnUndo<c:out value='${haramOne.modelName}'/>').on('click', function(){
         if(<c:out value='${haramOne.objectName}'/>.dataSet.getMarkedCount() > 0) {
-            for(var i = 0 ; i < riskEvalTmplt.dataSet.getCount() ; i++) {
+            for(var i = 0 ; i < <c:out value='${haramOne.objectName}'/>.dataSet.getCount() ; i++) {
                 if(<c:out value='${haramOne.objectName}'/>.dataSet.isMarked(i))
                 <c:out value='${haramOne.objectName}'/>.dataSet.undo(i);
             }
@@ -671,7 +671,7 @@ $(function() {
     //<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/> [행삽입] 버튼
     $('#btnInsert<c:out value='${haramOne.modelName}'/>').on('click', function(){
         if(<c:out value='${haramOne.objectName}'/>.dataSet.getRow() < 0) return;
-        var row = <c:out value='${haramOne.objectName}'/>.dataSet.newRecord(riskEvalTmplt.dataSet.getRow());
+        var row = <c:out value='${haramOne.objectName}'/>.dataSet.newRecord(<c:out value='${haramOne.objectName}'/>.dataSet.getRow());
         if (row !== false) {
             addrowInit(row);
         }
