@@ -530,7 +530,7 @@ Rui.onReady(function() {
 
 
 // 전역변수
-let <c:out value='${haramOne.objectName}'/> = { dataSet : null , columnModel : null ,gridPanel : null}//<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/>
+let <c:out value='${haramOne.objectName}'/> = { dataSet : null , columnModel : null ,gridPanel : null, selectionModel:null, validatorManager:null}//<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/>
 let cbUseYn;
 let <c:out value='${haramOne.objectName}'/>_SM;
              
@@ -572,10 +572,10 @@ const fn_init = function(){
     
     <c:out value='${haramOne.objectName}'/>.gridPanel.render('<c:out value='${haramOne.objectName}'/>.gridDiv');
 
-    <c:out value='${haramOne.objectName}'/>_SM  = <c:out value='${haramOne.objectName}'/>.gridPanel.getSelectionModel();
+    <c:out value='${haramOne.objectName}'/>.selectionModel  = <c:out value='${haramOne.objectName}'/>.gridPanel.getSelectionModel();
 
 
-    <c:out value='${haramOne.objectName}'/>_SM.on('selectCell', function(e){
+    <c:out value='${haramOne.objectName}'/>.selectionModel.on('selectCell', function(e){
         var column = <c:out value='${haramOne.objectName}'/>.columnModel.getColumnAt(e.col, true);
         var colId = column.getId();
         /*
@@ -587,12 +587,19 @@ const fn_init = function(){
     
     });
 
-    <c:out value='${haramOne.objectName}'/>_SM.on('selectRow', function(e){
+    <c:out value='${haramOne.objectName}'/>.selectionModel.on('selectRow', function(e){
         var selectRowRecord = <c:out value='${haramOne.objectName}'/>.dataSet.getAt(e.row);
         /*
         <c:forEach var="haram" items="${haramList}" varStatus="status">
         var select_<c:out value='${haram.fieldname}'/>= selectRowRecord.get('<c:out value='${haram.fieldname}'/>');</c:forEach>
         */
+    });
+
+    <c:out value='${haramOne.objectName}'/>.validatorManager = new Rui.validate.LValidatorManager({
+        validators: [
+        <c:forEach var="haram" items="${haramList}" varStatus="status">
+            { id: '<c:out value='${haram.fieldname}'/>', validExp:'${empty haram.comments ? haram.fieldname:haram.comments}:true' },</c:forEach>
+        ]
     });
 
     // 검색 영역 검색
