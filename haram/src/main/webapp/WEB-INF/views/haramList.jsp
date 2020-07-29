@@ -411,7 +411,7 @@ import com.lgcns.profit.common.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.netty.util.internal.StringUtil;
+import org.springframework.util.StringUtils;
 import io.swagger.annotations.ApiOperation;
 
 
@@ -482,7 +482,7 @@ public class <c:out value='${haramOne.modelName}'/>Controller {
         <c:out value='${haramOne.modelName}'/>Builder bldr = <c:out value='${haramOne.modelName}'/>.builder();
 
         <c:forEach var="haram" items="${haramList}" varStatus="status"><c:if test="${haram.modeltype ne 'Date'}">
-        if(!StringUtil.isNullOrEmpty(<c:out value='${haram.fieldname}'/>)) bldr.<c:out value='${haram.fieldname}'/>(<c:out value='${haram.fieldname}'/>);</c:if></c:forEach>
+        if(!StringUtils.isEmpty(<c:out value='${haram.fieldname}'/>)) bldr.<c:out value='${haram.fieldname}'/>(<c:out value='${haram.fieldname}'/>);</c:if></c:forEach>
 
         <c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>   = bldr.build();
 
