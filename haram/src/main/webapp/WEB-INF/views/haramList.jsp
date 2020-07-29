@@ -639,6 +639,14 @@ const fn_<c:out value='${haramOne.objectName}'/>Grid = function(response){
     
 }//END fn_<c:out value='${haramOne.objectName}'/>
 
+
+//추가되는 ROW 에 useYn  필드가 있다면 기본Y로 셋팅      
+const addrowInit = function(row){
+    var record = <c:out value='${haramOne.objectName}'/>.dataSet.getAt(row);
+    record.set('useYn', 'Y');
+}
+
+
 $(function() {
 
     //<c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/> [취소] 버튼
