@@ -595,6 +595,7 @@ const fn_init = function(){
         */
     });
 
+    //:maxByteLength=200 //:byteLength=4 //:inNumber=90~100 //:maxNumber=100 //영문숫자만허용 :allow=\\a;\\n //:date=YYYYMMDD 
     <c:out value='${haramOne.objectName}'/>.validatorManager = new Rui.validate.LValidatorManager({
         validators: [
         <c:forEach var="haram" items="${haramList}" varStatus="status">
