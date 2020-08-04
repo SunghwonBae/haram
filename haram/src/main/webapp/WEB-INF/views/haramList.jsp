@@ -260,7 +260,9 @@ public interface <c:out value='${haramOne.modelName}'/>Service {
 
 package <c:out value='${haramOne.packageName}'/>.service;
 
+import com.lgcns.profit.common.model.NumGen;
 import com.lgcns.profit.common.model.SessionUser;
+import com.lgcns.profit.common.service.NumGenService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -275,6 +277,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 // import org.springframework.transaction.annotation.Transactional;
 
+
+
 //log4j
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -285,8 +289,11 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     @Autowired
     <c:out value='${haramOne.modelName}'/>Repository <c:out value='${haramOne.objectName}'/>Repository;
 
-    @Qualifier("dbmessageSource")
-    private DBMessageSource messageSource;
+    @Autowired
+    DBMessageSource messageSource;
+
+    @Autowired
+    NumGenService numGenService;
 
     private static final Logger LOGGER = LogManager.getLogger(<c:out value='${haramOne.modelName}'/>ServiceImpl.class);
 
