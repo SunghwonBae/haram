@@ -745,7 +745,7 @@ $(function() {
         console.log(modifedCheckJson);
 
         if(<c:out value='${haramOne.objectName}'/>.dataSet.getMarkedCount()==0){
-            cfn_openAlertMsgBox('선택된 항목이 없습니다.');
+            cfn_openAlertMsgBox('Common.NoDataWasSelected');
             return ;
         }
 
@@ -753,17 +753,17 @@ $(function() {
             return false;
         }
         
-        cfn_openConfirmMsgBox('저장 하시겠습니까', function() {
+        cfn_openConfirmMsgBox('Common.saveConfirm', function() {
             cfn_ajax('<c:out value='${packagePath}'/>/${fn:toLowerCase(haramOne.objectName)}',
                 function(response) {
                     //console.log('성공');
                     //console.log(response);
 
-                    cfn_openAlertMsgBox('정상적으로 처리되었습니다.');
+                    cfn_openAlertMsgBox('Common.success');
                 },
                 function(response, status, error) {
                     console.log('error');
-                    console.log(response, status, error);
+                    cfn_openAlertMsgBox(response.responseJSON.message);
                 },
                 'POST',
                 modifedCheckJson
