@@ -542,6 +542,10 @@ let cbUseYn;
 let <c:out value='${haramOne.objectName}'/>_SM;
              
 
+const fn_onError = function(request, status, error){
+    
+}
+
 // 기능 
 const fn_init = function(){
 
@@ -572,6 +576,7 @@ const fn_init = function(){
     {
         columnModel: <c:out value='${haramOne.objectName}'/>.columnModel,
         autoWidth: true,
+        autoToEdit: true,
         clickToEdit: true,
         editable:true,
         dataSet:<c:out value='${haramOne.objectName}'/>.dataSet
