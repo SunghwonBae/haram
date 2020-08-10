@@ -781,29 +781,28 @@ $(function() {
                 </td>
                 <td>
                     <textarea style="width: 450px;height: 500px;overflow:auto;" wrap="off">
-                        
-                        <div class="conHeader_wrap">
-                            <h2><c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/></h2>
-                            <em class="count" id="<c:out value='${haramOne.objectName}'/>Count"></em>
-                            <ul class="innerBtn_wrap">
-                                <li><a href="#a" id='btnInsert<c:out value='${haramOne.modelName}'/>'>행삽입</a></li>
-                                <li><a href="#a" id='btnUndo<c:out value='${haramOne.modelName}'/>'>취소</a></li>
-                                <li><a href="#a" id='btnUndoAll<c:out value='${haramOne.modelName}'/>'>전체취소</a></li>
-                            </ul>
-                            <ul class="btnArea">
-                                <li><button type="button" id='btnNew<c:out value='${haramOne.modelName}'/>' class="btn_add"><span>추가</span></button></li>
-                                <li><button type="button" id='btnDelete<c:out value='${haramOne.modelName}'/>' class="btn_subtract"><span>삭제</span></button></li>
-                            </ul>
+                        <div class="conBox_wrap">
+                            <div class="conHeader_wrap">
+                                <h2><c:out value='${empty haramOne.tableComment ? haramOne.tableName : haramOne.tableComment}'/></h2>
+                                <em class="count" id="<c:out value='${haramOne.objectName}'/>Count"></em>
+                                <ul class="innerBtn_wrap">
+                                    <li><a href="#a" id='btnInsert<c:out value='${haramOne.modelName}'/>'>행삽입</a></li>
+                                    <li><a href="#a" id='btnUndo<c:out value='${haramOne.modelName}'/>'>취소</a></li>
+                                    <li><a href="#a" id='btnUndoAll<c:out value='${haramOne.modelName}'/>'>전체취소</a></li>
+                                </ul>
+                                <ul class="btnArea">
+                                    <li><button type="button" id='btnNew<c:out value='${haramOne.modelName}'/>' class="btn_add"><span>추가</span></button></li>
+                                    <li><button type="button" id='btnDelete<c:out value='${haramOne.modelName}'/>' class="btn_subtract"><span>삭제</span></button></li>
+                                </ul>
+                            </div>
+                            <div class="gridStyle_wrap hiRowM"  id="<c:out value='${haramOne.objectName}'/>.gridDiv" style="height: 200px;"></div>
+                            
+                            <div class="tableFooter_wrap">    
+                                <div class="conBtn_wrap">
+                                    <a href="#a" id='btnSave<c:out value='${haramOne.modelName}'/>' class="btn_point">저장</a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="gridStyle_wrap hiBase" style="height:200px !important;">
-                            <div id="<c:out value='${haramOne.objectName}'/>.gridDiv" style="height: 200px;"></div>
-                        </div>
-                        <div class="tableFooter_wrap">    
-                        <div class="conBtn_wrap">
-                            <a href="#a" id='btnSave<c:out value='${haramOne.modelName}'/>' class="btn_point">저장</a>
-                        </div>
-                        </div>
-                    
                     </textarea>
                 </td>
             </tr>        
