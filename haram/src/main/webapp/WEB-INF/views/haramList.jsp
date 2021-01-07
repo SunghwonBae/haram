@@ -91,8 +91,6 @@ public class <c:out value='${haramOne.modelName}'/> {
 <c:forEach var="haram" items="${haramList}" varStatus="status">
     <c:out value='${haram.modelfield}'/>
 </c:forEach>
-    private String crudCode;
-
     private String localeCd;
 
     private Integer duistate;//그리드 편집상태. 0그대로 1추가, 2수정, 3삭제
