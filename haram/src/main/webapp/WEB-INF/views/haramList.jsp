@@ -228,10 +228,10 @@ import com.lgcns.profit.common.model.SessionUser;
 
 
 public interface <c:out value='${haramOne.modelName}'/>Service {
-    public void save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception;
+    public void save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List) throws Exception;
     public int create<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
     public int delete<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
-    public List<<c:out value='${haramOne.modelName}'/>> select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>, SessionUser session) throws Exception;
+    public List<<c:out value='${haramOne.modelName}'/>> select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
     public int update<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception;
 }
 
@@ -281,6 +281,7 @@ import org.springframework.stereotype.Service;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import java.util.List;
+import com.lgcns.profit.common.util.SessionScopeUtil;
 
 @Service("<c:out value='${haramOne.objectName}'/>ServiceImpl")
 public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out value='${haramOne.modelName}'/>Service {
@@ -302,8 +303,10 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     */
     @Override
     // @Transactional(rollbackFor = Exception.class)
-    public void save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List, SessionUser session) throws Exception {
+    public void save<c:out value='${haramOne.modelName}'/>(List<<c:out value='${haramOne.modelName}'/>> <c:out value='${haramOne.objectName}'/>List) throws Exception {
 
+        SessionUser session = SessionScopeUtil.getAttribute(SessionScopeUtil.SESSION_USER);
+        
         if ( <c:out value='${haramOne.objectName}'/>List.isEmpty() ) {
 			throw new BusinessException(messageSource.getMessage(session.getTenantId(), session.getLocale(), "info.common.save0001"));
         }
@@ -367,7 +370,8 @@ public class <c:out value='${haramOne.modelName}'/>ServiceImpl implements <c:out
     * @return List<<c:out value='${haramOne.modelName}'/>>
     */
     @Override
-    public List<<c:out value='${haramOne.modelName}'/>> select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>, SessionUser session) throws Exception {
+    public List<<c:out value='${haramOne.modelName}'/>> select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.modelName}'/> <c:out value='${haramOne.objectName}'/>) throws Exception {
+        SessionUser session = SessionScopeUtil.getAttribute(SessionScopeUtil.SESSION_USER);
         <c:out value='${haramOne.objectName}'/>.setTenantUid(session.getTenantId());
         <c:out value='${haramOne.objectName}'/>.setLocaleCd(session.getLocale());
         List<<c:out value='${haramOne.modelName}'/>> result = <c:out value='${haramOne.objectName}'/>Repository.select<c:out value='${haramOne.modelName}'/>(<c:out value='${haramOne.objectName}'/>);
