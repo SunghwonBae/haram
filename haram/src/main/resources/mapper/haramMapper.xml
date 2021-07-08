@@ -76,5 +76,6 @@
 		where
 			table_schema =
 			#{schemaName} 
+			and table_name not like 'BAK%'
     </select>
 </mapper>
