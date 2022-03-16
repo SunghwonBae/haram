@@ -43,12 +43,12 @@
 <body>
     <h3>아래 개발자명과 ?로 제안하는 값을 수정하고 Smile을 클릭하세요.</h3>
     개발자명: <input name="developerName" value="배성훤" style="width:100px"/><br>
-
+   
     <table>
         <tr><th>table name</th><th>comment?</th><th>package?</th><th>model name?</th><th>smile</th></tr>
         <c:forEach var="haram" items="${tableList}" varStatus="status">
             <tr>
-                <td><input name="schemaName" value="<c:out value='${haram.schemaName}'/>" type="hidden"/><input name="tableName" value="<c:out value='${haram.tableName}'/>" type="hidden"/><c:out value='${haram.tableName}'/></td>
+                <td><c:out value='${status.index+1}'/> <input name="schemaName" value="<c:out value='${haram.schemaName}'/>" type="hidden"/><input name="tableName" value="<c:out value='${haram.tableName}'/>" type="hidden"/><c:out value='${haram.tableName}'/></td>
                 <td><input name="tableComment" value="<c:out value='${haram.tableComment}'/>" style="width:100px"/></td>
                 <td>com.lgcns.profit.category.<input name="packageName" value="<c:out value='${haram.packageName}'/>" style="width:130px"/></td>
                 <td>.model.<input name="modelName" value="<c:out value='${haram.modelName}'/>" style="width:130px"/>.java</td><td>&nbsp;&nbsp;&nbsp;<input type="button" class="smile" name="smile" value="Smile"></td>
